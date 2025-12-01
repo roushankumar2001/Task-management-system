@@ -1,0 +1,1 @@
+This is a minimal Next.js frontend. Run `npm install` and `npm run dev` to start.
