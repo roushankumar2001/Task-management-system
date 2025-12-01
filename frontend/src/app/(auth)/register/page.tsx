@@ -37,7 +37,7 @@ const showAlert = useAlertstore((s) => s.showAlert);
 
       const res = await register({ otp });
       if (res.success) {
-         showAlert(`Registration completed for\n ${res.res.email} \ngo to login`,"success");
+         showAlert(`Registration completed for\n\n${res.res.email} \n\n--> go to login`,"success");
         }
 
 
@@ -88,7 +88,7 @@ const showAlert = useAlertstore((s) => s.showAlert);
           <p>OTP sent to your email</p>
 
           <input
-            className="border p-2 w-full"
+            className="border p-2 w-full dark:bg-gray-800"
             placeholder="Enter OTP"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
