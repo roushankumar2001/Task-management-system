@@ -89,12 +89,11 @@ export const useAppStore = create<any>((set, get) => ({
 
   loadTasks: async ()=> {
     const token = get().accessToken;
-    console.log("Loading tasks with token:", token);
     if(!token) return;
-    // set({ tasksLoading:true });
+    set({ tasksLoading:true });
     const res = await api.getTasks(token);
-    console.log('loadTasks response:', res);
-    set({ tasks: res.data, tasksLoading:false });
+    console.log('loadTasks response appstore:', res);
+    set({ tasks: res, tasksLoading:false });
   },
 
   addTask: async (title:string)=> {

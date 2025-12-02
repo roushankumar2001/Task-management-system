@@ -1,6 +1,6 @@
 'use client';
 import { useEffect } from 'react';
-import { useAppStore } from '../../../store/appstore';
+import { useAppStore } from '../../../../store/appstore';
 import Link from 'next/link';
 export default function Dashboard() {
  
