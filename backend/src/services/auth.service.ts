@@ -7,7 +7,6 @@ import * as validate from "../utils/validate";
 
 export async function register(data: any) {
   // CASE : OTP Verification second stage
-  console.log("Register data:", data);
   if (data.otp && data.temptoken) {
     let decoded;
 
@@ -43,7 +42,7 @@ export async function register(data: any) {
   // CASE 1: Initial Registration Step (send OTP)
   const { name, email, password } = data;
   if (!name || !email || !password) {
-    throw { status: 400, message: "case1 Name, email, password required" };
+    throw { status: 400, message: " Name, email, password required" };
   }
 
   // check if user exists
@@ -86,6 +85,8 @@ export async function login(data: any) {
   await prisma.refreshToken.create({ data: { tokenHash: refreshHash, userId: user.id, expiresAt } });
   return { user: { id: user.id, email: user.email, name: user.name }, accessToken, refreshToken };
 }
+
+
 
 export async function RefreshToken(token: string) {
   if (!token) throw { status: 401, message: "No refresh token" };
