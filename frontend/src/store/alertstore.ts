@@ -1,12 +1,12 @@
 import { create } from "zustand";
-
+import { ReactNode } from "react";
 type AlertType = "success" | "error" | "warning" | "info";
 
 interface AlertState {
   isOpen: boolean;
-  message: string;
+  message: ReactNode;
   type: AlertType;
-  showAlert: (msg: string, type?: AlertType) => void;
+  showAlert: (msg: ReactNode, type?: AlertType) => void;
   closeAlert: () => void;
 }
 

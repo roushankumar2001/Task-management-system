@@ -12,16 +12,20 @@ export const useAppStore = create<any>((set, get) => ({
   setAccessToken: (t: string | null) => set({ accessToken: t, isLoggedIn: !!t }),
 
   login: async (email: string, password: string) => {
-    set({ authLoading: true });
+
+
     const res = await api.login({ email, password });
-    const { accessToken, user } = res.data;
+    
+    const { accessToken, user } = res;
+
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('user', JSON.stringify(user));
+    
     set({ user, accessToken, isLoggedIn: true, authLoading: false });
   },
 
   register: async (data: any) => {
-    set({ authLoading: true });
+
 
     try {
       const storedToken = get().temptoken || localStorage.getItem("temptoken");
@@ -34,11 +38,7 @@ export const useAppStore = create<any>((set, get) => ({
           temptoken: storedToken
         });
 
-      
-
-        // save final login state
-        // set({ user, accessToken, isLoggedIn: true, tempToken: null });
-        localStorage.removeItem("tempToken");
+        localStorage.removeItem("temptoken");
 
         return { success: true, res:res};
       }
@@ -75,41 +75,44 @@ export const useAppStore = create<any>((set, get) => ({
   },
 
   loadProfile: async () => {
-    set({ authLoading: true });
+  
     const token = localStorage.getItem('accessToken');
     if (!token) { set({ authLoading: false }); return; }
     set({ accessToken: token });
     try {
       const res = await api.getProfile(token);
-      set({ user: res.data.user, isLoggedIn: true });
+      // console.log('loadProfile response:', res.user);
+      set({ user: res.user, isLoggedIn: true });
     } catch (e) { localStorage.removeItem('accessToken'); set({ user: null, accessToken: null, isLoggedIn: false }); }
     set({ authLoading: false });
   },
 
-  // loadTasks: async ()=> {
-  //   const token = get().accessToken;
-  //   if(!token) return;
-  //   set({ tasksLoading:true });
-  //   const res = await api.get('/tasks', { headers:{ Authorization: `Bearer ${token}` }});
-  //   set({ tasks: res.data, tasksLoading:false });
-  // },
+  loadTasks: async ()=> {
+    const token = get().accessToken;
+    console.log("Loading tasks with token:", token);
+    if(!token) return;
+    // set({ tasksLoading:true });
+    const res = await api.getTasks(token);
+    console.log('loadTasks response:', res);
+    set({ tasks: res.data, tasksLoading:false });
+  },
 
-  // addTask: async (title:string)=> {
-  //   const token = get().accessToken;
-  //   const res = await api.post('/tasks', { title }, { headers:{ Authorization: `Bearer ${token}` }});
-  //   set({ tasks: [...get().tasks, res.data] });
-  // },
+  addTask: async (title:string)=> {
+    const token = get().accessToken;
+    const res = await api.addTask(title, token);
+    set({ tasks: [...get().tasks, res] });
+  },
 
-  // deleteTask: async (id:number)=> {
-  //   const token = get().accessToken;
-  //   await api.delete(`/tasks/${id}`, { headers:{ Authorization: `Bearer ${token}` }});
-  //   set({ tasks: get().tasks.filter((t:any)=> t.id !== id) });
-  // },
+  deleteTask: async (id:number)=> {
+    const token = get().accessToken;
+    await api.deleteTask(id, token);
+    set({ tasks: get().tasks.filter((t:any)=> t.id !== id) });
+  },
 
-  // toggleTask: async (id:number)=> {
-  //   const token = get().accessToken;
-  //   const res = await api.patch(`/tasks/${id}/toggle`, {}, { headers:{ Authorization: `Bearer ${token}` }});
-  //   set({ tasks: get().tasks.map((t:any)=> t.id===id? res.data : t) });
-  // },
+  toggleTask: async (id:number)=> {
+    const token = get().accessToken;
+    const res = await api.toggleTask(id, token);                        
+    set({ tasks: get().tasks.map((t:any)=> t.id===id? res.data : t) });
+  },
 
 }));
