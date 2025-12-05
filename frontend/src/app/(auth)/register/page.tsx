@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useAppStore } from "../../../store/appstore";
 import { useAlertstore } from "../../../store/alertstore";
 import Link from "next/link";
+import TMS from "../../../components/TMS";
 export default function RegisterForm() {
   const register = useAppStore((s) => s.register);
   const showAlert = useAlertstore((s) => s.showAlert);
@@ -55,8 +56,7 @@ export default function RegisterForm() {
   return (
     <>
       <div className="max-w-sm mx-auto p-2">
-        <h2 className="text-xl font-semibold">Sign up to
-          Task Management system</h2>
+        <h2 className="text-xl text-center font-semibold">Sign up to <TMS/></h2>
         <hr className="my-4 border-gray-300" />
         {step === 1 && (
 
